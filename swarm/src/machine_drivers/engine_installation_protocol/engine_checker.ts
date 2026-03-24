@@ -1,7 +1,8 @@
 import { Actyx } from '@actyx/sdk'
-import { createMachineRunnerBT } from '@actyx/machine-runner'
+import { createMachineRunnerBT, utils } from '@actyx/machine-runner'
 import { Composition, carFactoryProtocol, subsCarFactory, EngineInstallationProtocol, getArgs, manifestFromArgs } from '../../protocol.js'
 import { engineChecker, s0, s1 } from '../../machines/engine_installation_protocol/engine_checker.js'
+import { randomUUID } from 'crypto';
 
 // "BOTTLENECK" seems to be starting node processes not ax or anything. try exporting mains and calling these instead -- one process sort of.
 
@@ -13,7 +14,9 @@ export async function main() {
   const argv = getArgs()
   const app = await Actyx.of(manifestFromArgs(argv))
   const tags = Composition.tagWithEntityId(argv.displayName)
-  const machine = createMachineRunnerBT(app, tags, s0Adapted, undefined, engineCheckerAdapted)
+  const logFile = `${argv.logDir}/${engineCheckerAdapted.machineName}-${randomUUID()}.log`
+  const logger = utils.logger.Logger.make(logFile)
+  const machine = createMachineRunnerBT(app, tags, s0Adapted, undefined, engineCheckerAdapted, logger)
 
   for await (const state of machine) {
     if (state.isLike(s1)) {
@@ -25,5 +28,3 @@ export async function main() {
   }
   app.dispose()
 }
-
-//main()

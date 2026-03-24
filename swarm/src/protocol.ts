@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-namespace */
 import { MachineEvent, SwarmProtocol } from '@actyx/machine-runner'
-import { type SwarmProtocolType, type Subscriptions, type Result, type DataResult, overapproxWFSubscriptions, checkComposedSwarmProtocol, type InterfacingProtocols, composeProtocols} from '@actyx/machine-check'
+import { type SwarmProtocolType, type Subscriptions, type DataResult, overapproxWFSubscriptions, type InterfacingProtocols, composeProtocols} from 'machine-core'
+import { checkComposedSwarmProtocol, type CheckResult } from '@actyx/machine-check'
 import chalk from "chalk";
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
@@ -325,7 +326,7 @@ if (resultSubsCarFactory.type === 'ERROR') throw new Error(resultSubsCarFactory.
 export var subsCarFactory: Subscriptions = resultSubsCarFactory.data
 
 // check that the subscription generated for the composition is indeed well-formed
-const resultCheckWf: Result = checkComposedSwarmProtocol(carFactoryProtocol, subsCarFactory)
+const resultCheckWf: CheckResult = checkComposedSwarmProtocol(carFactoryProtocol, subsCarFactory)
 if (resultCheckWf.type === 'ERROR') throw new Error(resultCheckWf.errors.join(', \n'))
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
@@ -368,6 +369,12 @@ export const getArgs = () => {
               description: "Version of application",
               default: "1.0.0"
             })
+            .option("logDir", {
+              alias: "l",
+              type: "string",
+              description: "Directory containing logfiles",
+              default: "logs"
+            })
             .parseSync();
     return argv
 }
@@ -376,6 +383,7 @@ type Argv = {
   displayName: string;
   appId: string;
   appVersion: string;
+  logDir: string;
 }
 export const manifestFromArgs = (argv: Argv): AppManifest => {
   return { appId: argv.appId, displayName: argv.displayName, version: argv.appVersion}

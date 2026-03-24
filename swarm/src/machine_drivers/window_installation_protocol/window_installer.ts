@@ -1,7 +1,8 @@
 import { Actyx } from '@actyx/sdk'
-import { createMachineRunnerBT } from '@actyx/machine-runner'
+import { createMachineRunnerBT, utils } from '@actyx/machine-runner'
 import { Composition, carFactoryProtocol, subsCarFactory, WindowInstallationProtocol, getArgs, manifestFromArgs } from '../../protocol.js'
 import { s0, s1, s2, windowInstaller } from '../../machines/window_installation_protocol/window_installer.js'
+import { randomUUID } from 'crypto';
 
 // Adapted machine. Adapting here has no effect. Except that we can make a verbose machine.
 const [windowInstallerAdapted, s0Adapted] = Composition.adaptMachine(WindowInstallationProtocol.windowInstallerRole, carFactoryProtocol, 5, subsCarFactory, [windowInstaller, s0]).data!
@@ -11,7 +12,9 @@ export async function main() {
   const argv = getArgs()
   const app = await Actyx.of(manifestFromArgs(argv))
   const tags = Composition.tagWithEntityId(argv.displayName)
-  const machine = createMachineRunnerBT(app, tags, s0Adapted, undefined, windowInstallerAdapted)
+  const logFile = `${argv.logDir}/${windowInstallerAdapted.machineName}-${randomUUID()}.log`
+  const logger = utils.logger.Logger.make(logFile)
+  const machine = createMachineRunnerBT(app, tags, s0Adapted, undefined, windowInstallerAdapted, logger)
 
   for await (const state of machine) {
     if (state.isLike(s1)) {

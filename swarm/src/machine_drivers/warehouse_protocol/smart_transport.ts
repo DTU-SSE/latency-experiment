@@ -1,5 +1,5 @@
 import { Actyx } from '@actyx/sdk'
-import { createMachineRunnerBT } from '@actyx/machine-runner'
+import { createMachineRunnerBT, utils } from '@actyx/machine-runner'
 import { Composition, carFactoryProtocol, subsCarFactory, WarehouseProtocol, getRandomInt, getArgs, manifestFromArgs } from '../../protocol.js'
 import { randomUUID } from 'crypto';
 import { s0, s1, s2, s5, transport, type Score } from '../../machines/warehouse_protocol/transport.js';
@@ -14,7 +14,9 @@ export async function main() {
   const tags = Composition.tagWithEntityId(argv.displayName)
   const initialPayload = { id: randomUUID().slice(0, 8) }
   const bestTransport = (scores: Score[]) => scores.reduce((best, current) => current.delay <= best.delay ? current : best).transportId
-  const machine = createMachineRunnerBT(app, tags, s0Adapted, initialPayload, transportAdapted)
+  const logFile = `${argv.logDir}/${transportAdapted.machineName}-${randomUUID()}.log`
+  const logger = utils.logger.Logger.make(logFile)
+  const machine = createMachineRunnerBT(app, tags, s0Adapted, initialPayload, transportAdapted, logger)
 
   for await (const state of machine) {
     if (state.isLike(s1)) {
@@ -44,5 +46,3 @@ export async function main() {
 
   app.dispose()
 }
-
-//main()

@@ -42,6 +42,7 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
+    "machine-core": "file:./vendor/machine-core-0.1.0.tgz",
     "@actyx/machine-check": "file:./vendor/actyx-machine-check-0.3.1.tgz",
     "@actyx/machine-runner": "file:./vendor/actyx-machine-runner-0.5.7.tgz",
     "@actyx/sdk": "^0.5.10",

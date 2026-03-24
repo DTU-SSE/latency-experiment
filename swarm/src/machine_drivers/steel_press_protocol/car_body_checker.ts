@@ -1,7 +1,8 @@
 import { Actyx } from '@actyx/sdk'
-import { createMachineRunnerBT } from '@actyx/machine-runner'
+import { createMachineRunnerBT, utils } from '@actyx/machine-runner'
 import { Composition, carFactoryProtocol, subsCarFactory, SteelPressProtocol, NUMBER_OF_CAR_PARTS, getArgs, manifestFromArgs } from '../../protocol.js'
 import { carBodyChecker, s0 } from '../../machines/steel_press_protocol/car_body_checker.js';
+import { randomUUID } from 'crypto';
 
 // Adapted machine. Adapting here has no effect. Except that we can make a verbose machine.
 const [carBodyCheckerAdapted, s0Adapted] = Composition.adaptMachine(SteelPressProtocol.carBodyCheckerRole, carFactoryProtocol, 0, subsCarFactory, [carBodyChecker, s0]).data!
@@ -12,7 +13,9 @@ export async function main() {
   const app = await Actyx.of(manifestFromArgs(argv))
   const tags = Composition.tagWithEntityId(argv.displayName)
   const initialPayload = { parts: [] }
-  const machine = createMachineRunnerBT(app, tags, s0Adapted, initialPayload, carBodyCheckerAdapted)
+  const logFile = `${argv.logDir}/${carBodyCheckerAdapted.machineName}-${randomUUID()}.log`
+  const logger = utils.logger.Logger.make(logFile)
+  const machine = createMachineRunnerBT(app, tags, s0Adapted, initialPayload, carBodyCheckerAdapted, logger)
 
   for await (const state of machine) {
     if (state.isLike(s0)) {

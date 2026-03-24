@@ -1,7 +1,8 @@
 import { Actyx } from '@actyx/sdk'
-import { createMachineRunnerBT } from '@actyx/machine-runner'
+import { createMachineRunnerBT, utils } from '@actyx/machine-runner'
 import { Composition, carFactoryProtocol, subsCarFactory, PaintShopProtocol, getArgs, manifestFromArgs } from '../../protocol.js'
 import { painter, s0, s1 } from '../../machines/paint_shop_protocol/painter.js';
+import { randomUUID } from 'crypto';
 
 // A car can have one of these colors
 const colors = ["red", "blue", "green"]
@@ -14,7 +15,9 @@ export async function main() {
   const argv = getArgs()
   const app = await Actyx.of(manifestFromArgs(argv))
   const tags = Composition.tagWithEntityId(argv.displayName)
-  const machine = createMachineRunnerBT(app, tags, s0Adapted, undefined, painterAdapted)
+  const logFile = `${argv.logDir}/${painterAdapted.machineName}-${randomUUID()}.log`
+  const logger = utils.logger.Logger.make(logFile)
+  const machine = createMachineRunnerBT(app, tags, s0Adapted, undefined, painterAdapted, logger)
 
   for await (const state of machine) {
     if (state.isLike(s1)) {
@@ -26,5 +29,3 @@ export async function main() {
   }
   app.dispose()
 }
-
-//main()
