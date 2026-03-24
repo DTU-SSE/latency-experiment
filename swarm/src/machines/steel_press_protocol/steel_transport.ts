@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { Events, Composition, SteelPressProtocol } from './../../protocol.js'
 import { checkComposedProjection } from '@actyx/machine-check';
 
@@ -8,7 +9,7 @@ export const steelTransport = Composition.makeMachine(SteelPressProtocol.steelTr
 export const s0 = steelTransport.designState('s0')
     .withPayload<SteelTransportPayload>()
     .command(SteelPressProtocol.cmdPickUpSteel, [Events.steelRoll], () => {
-    return [Events.steelRoll.make({})]
+    return [Events.steelRoll.make({msgID: randomUUID()})]
   })
   .finish()
 export const s1 = steelTransport.designState('s1').withPayload<SteelTransportPayload>().finish()

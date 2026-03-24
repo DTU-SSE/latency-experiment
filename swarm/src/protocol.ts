@@ -6,30 +6,32 @@ import chalk from "chalk";
 import yargs from 'yargs'
 import { hideBin } from 'yargs/helpers'
 import { type AppManifest } from '@actyx/sdk';
+
 export const manifest = {
   appId: 'com.example.car-factory',
   displayName: 'car-factory',
   version: '1.0.0',
 }
 // ctrl + shift + l :DDDD
-export type SteelPartsPayload = { part: string }
-export type PartialCarBodyPayload = { parts: string[] }
-export type CarBodyPayload = { shape: string }
-export type PaintedBodyPayload = { shape: string, color: string }
-export type ItemDeliveryPayload = { item: string, to: string }
-export type BidPayload = { transportId: string, delay: number }
-export type SelectedPayload = { winnerTransport: string }
-export type GuidanceRequestPayload = { item: string, to: string }
-export type RoutePayload = { directions: string[] }
-export type EngineInstallationPayload = { shape: string, color: string, engine: string }
-export type WheelInstallationPayload = { shape: string, color: string, engine: string, numWheels: number }
-export type WindowInstallationPayload = { shape: string, color: string, engine: string, numWindows: number }
-export type FinishedCarPayload = { shape: string, color: string, engine: string, numWheels: number, numWindows: number, isOk: boolean }
+export type SteelRollPayload = { msgID: string }
+export type SteelPartsPayload = { part: string, msgID: string }
+export type PartialCarBodyPayload = { parts: string[], msgID: string }
+export type CarBodyPayload = { shape: string, msgID: string }
+export type PaintedBodyPayload = { shape: string, color: string, msgID: string }
+export type ItemDeliveryPayload = { item: string, to: string, msgID: string }
+export type BidPayload = { transportId: string, delay: number, msgID: string }
+export type SelectedPayload = { winnerTransport: string, msgID: string }
+export type GuidanceRequestPayload = { item: string, to: string, msgID: string }
+export type RoutePayload = { directions: string[], msgID: string }
+export type EngineInstallationPayload = { shape: string, color: string, engine: string, msgID: string }
+export type WheelInstallationPayload = { shape: string, color: string, engine: string, numWheels: number, msgID: string }
+export type WindowInstallationPayload = { shape: string, color: string, engine: string, numWindows: number, msgID: string }
+export type FinishedCarPayload = { shape: string, color: string, engine: string, numWheels: number, numWindows: number, isOk: boolean, msgID: string }
 
 export const NUMBER_OF_CAR_PARTS = 3
 
 export namespace Events {
-  export const steelRoll = MachineEvent.design('SteelRoll').withoutPayload()
+  export const steelRoll = MachineEvent.design('SteelRoll').withPayload<SteelRollPayload>()
   export const steelParts = MachineEvent.design('SteelParts').withPayload<SteelPartsPayload>()
   export const partialCarBody = MachineEvent.design('PartialCarBody').withPayload<PartialCarBodyPayload>()
   export const carBody = MachineEvent.design('CarBody').withPayload<CarBodyPayload>()

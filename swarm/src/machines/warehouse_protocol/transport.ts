@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { Events, Composition, WarehouseProtocol } from '../../protocol.js'
 import { checkComposedProjection } from '@actyx/machine-check';
 
@@ -11,24 +12,24 @@ export const transport = Composition.makeMachine(WarehouseProtocol.transportRole
 export const s0 = transport.designState('s0').withPayload<InitialPayload>().finish()
 export const s1 = transport.designState('s1').withPayload<AuctionPayload>()
     .command(WarehouseProtocol.cmdBid, [Events.bid], (ctx, delay: number) =>
-        [{transportId: ctx.self.id, delay}])
+        [{transportId: ctx.self.id, delay, msgID: randomUUID()}])
     .command(WarehouseProtocol.cmdSelect, [Events.selected], (_, winner: string) =>
-        [{winnerTransport: winner}])
+        [{winnerTransport: winner, msgID: randomUUID()}])
     .finish()
 export const s2 = transport.designState('s2').withPayload<SelectedPayload>()
     .command(WarehouseProtocol.cmdNeedGuidance, [Events.requestGuidance], (ctx) =>
-        [Events.requestGuidance.make({ item: ctx.self.item, to: ctx.self.to })])
+        [Events.requestGuidance.make({ item: ctx.self.item, to: ctx.self.to, msgID: randomUUID() })])
     .command(WarehouseProtocol.cmdSmartPickup, [Events.itemPickupSmart], (ctx) =>
-        [{item: ctx.self.item, to: ctx.self.to}])
+        [{item: ctx.self.item, to: ctx.self.to, msgID: randomUUID()}])
     .finish()
 export const s3 = transport.designState('s3').withPayload<SelectedPayload>().finish()
 export const s4 = transport.designState('s4').withPayload<SelectedPayload>()
     .command(WarehouseProtocol.cmdBasicPickup, [Events.itemPickupBasic], (ctx) =>
-        [{item: ctx.self.item, to: ctx.self.to}])
+        [{item: ctx.self.item, to: ctx.self.to, msgID: randomUUID()}])
     .finish()
 export const s5 = transport.designState('s5').withPayload<SelectedPayload>()
     .command(WarehouseProtocol.cmdHandover, [Events.handover], (ctx) =>
-        [{item: ctx.self.item, to: ctx.self.to}])
+        [{item: ctx.self.item, to: ctx.self.to, msgID: randomUUID()}])
     .finish()
 
 s0.react([Events.itemRequest], s1, (ctx, event) => {

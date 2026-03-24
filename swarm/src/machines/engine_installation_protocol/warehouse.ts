@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { Events, Composition, EngineInstallationProtocol, type ItemDeliveryPayload } from './../../protocol.js'
 import { checkComposedProjection } from '@actyx/machine-check';
 
@@ -9,18 +10,18 @@ export const s0 = warehouse.designEmpty('s0').finish()
 export const s1 = warehouse.designState('s1')
     .withPayload<ItemDeliveryPayload>()
     .command(EngineInstallationProtocol.cmdRequest, [Events.itemRequest], (ctx) => {
-        return [Events.itemRequest.make({ item: ctx.self.item, to: ctx.self.to })]
+        return [Events.itemRequest.make({ item: ctx.self.item, to: ctx.self.to, msgID: randomUUID() })]
     })
     .finish()
 export const s2 = warehouse.designState('s2')
     .withPayload<ItemDeliveryPayload>()
-    .command(EngineInstallationProtocol.cmdDeliver, [Events.itemDelivery], (ctx) => [Events.itemDelivery.make({item: ctx.self.item, to: ctx.self.to})])
+    .command(EngineInstallationProtocol.cmdDeliver, [Events.itemDelivery], (ctx) => [Events.itemDelivery.make({item: ctx.self.item, to: ctx.self.to, msgID: randomUUID()})])
     .finish()
 export const s3 = warehouse.designEmpty('s3').finish()
 export const s4 = warehouse.designEmpty('s4').finish()
 
-s0.react([Events.requestEngine], s1, (_, event) => { return s1.make({ item: event.payload.item, to: event.payload.to }) })
-s1.react([Events.itemRequest], s2, (_, event) => { return s2.make({ item: event.payload.item, to: event.payload.to }) })
+s0.react([Events.requestEngine], s1, (_, event) => { return s1.make({ item: event.payload.item, to: event.payload.to, msgID: event.payload.msgID }) })
+s1.react([Events.itemRequest], s2, (_, event) => { return s2.make({ item: event.payload.item, to: event.payload.to, msgID: event.payload.msgID }) })
 s2.react([Events.itemDelivery], s3, (_) => { return s3.make() })
 
 // Check that the original machine is a correct implementation. A prerequisite for reusing it.

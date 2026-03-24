@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { Events, Composition, PaintShopProtocol } from './../../protocol.js'
 import { checkComposedProjection } from '@actyx/machine-check';
 
@@ -7,7 +8,7 @@ export const s0 = painter.designEmpty('s0').finish()
 export const s1 = painter.designState('s1')
     .withPayload<{shape: string}>()
     .command(PaintShopProtocol.cmdPaintBody, [Events.paintedCarBody], (ctx, color: string) => {
-        return [Events.paintedCarBody.make({ shape: ctx.self.shape, color: color })]
+        return [Events.paintedCarBody.make({ shape: ctx.self.shape, color: color, msgID: randomUUID() })]
     })
     .finish()
 export const s2 = painter.designEmpty('s2')

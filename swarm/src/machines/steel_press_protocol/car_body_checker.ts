@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { Events, Composition, SteelPressProtocol } from './../../protocol.js'
 import { checkComposedProjection } from '@actyx/machine-check';
 
@@ -10,9 +11,9 @@ export const s0 = carBodyChecker
     .withPayload<PartsPayload>()
     .command(SteelPressProtocol.cmdCheckCarBody, [Events.carBody], (ctx) => {
         if (ctx.self.parts.some(part => part === "loadBed")) {
-            return [Events.carBody.make({ shape: "truck" })]
+            return [Events.carBody.make({ shape: "truck", msgID: randomUUID() })]
         } else {
-            return [Events.carBody.make({ shape: "sedan" })]
+            return [Events.carBody.make({ shape: "sedan", msgID: randomUUID() })]
         }
     })
     .finish()

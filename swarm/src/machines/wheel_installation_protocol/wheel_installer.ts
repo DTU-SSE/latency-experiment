@@ -1,18 +1,21 @@
+import { randomUUID } from 'crypto';
 import { Events, Composition, WheelInstallationProtocol, type WheelInstallationPayload } from './../../protocol.js'
 import { checkComposedProjection } from '@actyx/machine-check';
+
+type WheelInstallationStatePayload = { shape: string, color: string, engine: string, numWheels: number }
 
 export const wheelInstaller = Composition.makeMachine(WheelInstallationProtocol.wheelInstallerRole)
 export const s0 = wheelInstaller.designEmpty('s0').finish()
 export const s1 = wheelInstaller.designState('s1')
-    .withPayload<WheelInstallationPayload>()
+    .withPayload<WheelInstallationStatePayload>()
     .command(WheelInstallationProtocol.cmdPickUpWheel, [Events.wheelPickup], (ctx) => {
-            return [Events.wheelPickup.make(ctx.self)]
+            return [Events.wheelPickup.make({...ctx.self, msgID: randomUUID()})]
         })
     .finish()
 export const s2 = wheelInstaller.designState('s2')
-    .withPayload<WheelInstallationPayload>()
+    .withPayload<WheelInstallationStatePayload>()
     .command(WheelInstallationProtocol.cmdInstallWheel, [Events.wheelInstalled], (ctx) => {
-            return [Events.wheelInstalled.make({...ctx.self, numWheels: ctx.self.numWheels + 1})]
+            return [Events.wheelInstalled.make({...ctx.self, numWheels: ctx.self.numWheels + 1, msgID: randomUUID()})]
         })
     .finish()
 export const s3 = wheelInstaller.designEmpty('s3').finish()

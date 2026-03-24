@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { Events, Composition, QualityControlProtocol } from '../../protocol.js'
 import { checkComposedProjection } from '@actyx/machine-check';
 
@@ -18,7 +19,7 @@ export const s1 = qualityControl.designState('s1')
             && ctx.self.wheelsChecked
             && ctx.self.windowsChecked
         const { shape, color, engine, numWheels, numWindows } = ctx.self
-        return [Events.finishedCar.make({ shape, color, engine, numWheels, numWindows, isOk})]
+        return [Events.finishedCar.make({ shape, color, engine, numWheels, numWindows, isOk, msgID: randomUUID()})]
     })
     .finish()
 export const s2 = qualityControl.designEmpty('s2').finish()

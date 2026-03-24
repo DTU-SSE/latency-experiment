@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { Events, Composition, EngineInstallationProtocol, type EngineInstallationPayload } from '../../protocol.js'
 import { checkComposedProjection } from '@actyx/machine-check';
 
@@ -6,14 +7,14 @@ export const s0 = engineChecker.designEmpty('s0').finish()
 export const s1 = engineChecker.designState('s1')
     .withPayload<EngineInstallationPayload>()
     .command(EngineInstallationProtocol.cmdCheckEngine, [Events.engineChecked], (ctx) => {
-        return [Events.engineChecked.make(ctx.self)]
+        return [Events.engineChecked.make({...ctx.self, msgID: randomUUID()})]
     })
     .finish()
 export const s2 = engineChecker.designEmpty('s2').finish()
 
-s0.react([Events.engineInstalled], s1, (_, event) => { 
+s0.react([Events.engineInstalled], s1, (_, event) => {
     const {shape, color, engine} = event.payload;
-    return s1.make({shape, color, engine})})
+    return s1.make({shape, color, engine, msgID: randomUUID()})})
 s1.react([Events.engineChecked], s2, () => { return s2.make()})
 
 // Check that the original machine is a correct implementation. A prerequisite for reusing it.

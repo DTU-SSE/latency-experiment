@@ -1,18 +1,21 @@
+import { randomUUID } from 'crypto';
 import { Events, Composition, WindowInstallationProtocol, type WindowInstallationPayload } from './../../protocol.js'
 import { checkComposedProjection } from '@actyx/machine-check';
+
+type WindowInstallationStatePayload = { shape: string, color: string, engine: string, numWindows: number }
 
 export const windowInstaller = Composition.makeMachine(WindowInstallationProtocol.windowInstallerRole)
 export const s0 = windowInstaller.designEmpty('s0').finish()
 export const s1 = windowInstaller.designState('s1')
-    .withPayload<WindowInstallationPayload>()
+    .withPayload<WindowInstallationStatePayload>()
     .command(WindowInstallationProtocol.cmdPickUpWindow, [Events.windowPickup], (ctx) => {
-            return [Events.windowPickup.make(ctx.self)]
+            return [Events.windowPickup.make({...ctx.self, msgID: randomUUID()})]
         })
     .finish()
 export const s2 = windowInstaller.designState('s2')
-    .withPayload<WindowInstallationPayload>()
+    .withPayload<WindowInstallationStatePayload>()
     .command(WindowInstallationProtocol.cmdInstallwindow, [Events.windowInstalled], (ctx) => {
-            return [Events.windowInstalled.make({...ctx.self, numWindows: ctx.self.numWindows + 1})]
+            return [Events.windowInstalled.make({...ctx.self, numWindows: ctx.self.numWindows + 1, msgID: randomUUID()})]
         })
     .finish()
 export const s3 = windowInstaller.designEmpty('s3').finish()

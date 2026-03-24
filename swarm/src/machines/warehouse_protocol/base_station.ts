@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { Events, Composition, WarehouseProtocol } from '../../protocol.js'
 import { checkComposedProjection } from '@actyx/machine-check';
 
@@ -10,7 +11,7 @@ export const s1 = baseStation.designEmpty('s1').finish()
 export const s2 = baseStation.designState('s2')
     .withPayload<GiveGuidancePayload>()
     .command(WarehouseProtocol.cmdGiveGuidance, [Events.giveGuidance], (_) =>
-        [Events.giveGuidance.make({ directions: ["LEFT", "RIGHT", "LEFT"] })])
+        [Events.giveGuidance.make({ directions: ["LEFT", "RIGHT", "LEFT"], msgID: randomUUID() })])
     .finish()
 
 s0.react([Events.bid], s0, (_) => { return s0.make() })

@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto';
 import { Events, Composition, SteelPressProtocol } from './../../protocol.js'
 import { checkComposedProjection } from '@actyx/machine-check';
 
@@ -10,7 +11,7 @@ export const s0 = bodyAssembler.designState('s0').withPayload<PartsPayload>().fi
 export const s1 = bodyAssembler.designState('s1').withPayload<PartsPayload>().finish()
 export const s2 = bodyAssembler.designState('s2').withPayload<PartsPayload>()
   .command(SteelPressProtocol.cmdAssembleBody, [Events.partialCarBody], (ctx) => {
-    return [Events.partialCarBody.make({ parts: ctx.self.parts })]
+    return [Events.partialCarBody.make({ parts: ctx.self.parts, msgID: randomUUID() })]
   }).finish()
 export const s3 = bodyAssembler.designEmpty('s3').finish()
 
