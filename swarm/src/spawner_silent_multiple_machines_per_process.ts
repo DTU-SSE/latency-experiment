@@ -2,6 +2,12 @@ import { execa } from "execa";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
+function clearLineAndPrint(output: string) {
+    process.stdout.clearLine(0);
+    process.stdout.cursorTo(0);
+    process.stdout.write(output)
+}
+
 async function main() {
     // Parse args
     const argv = await yargs(hideBin(process.argv))
@@ -32,40 +38,55 @@ async function main() {
         : argv.choiceAorB === "b" ? [[first_half_b], [second_half_b]] : undefined
     if (!commands) { throw Error(`Invalid argument ${argv.choiceAorB} given`)}
 
-    const transporterCommand = argv.choiceAorB === "a" ? "dist/machine_drivers/run_two_transporters_B.js"
+    const firstIndex = 0
+    const lastIndex = 1
+
+    const transporterCommand = argv.choiceAorB === "a" ? "dist/machine_drivers/run_two_transporters_A.js"
         : argv.choiceAorB === "b" ? "dist/machine_drivers/run_two_transporters_B.js" : undefined
     if (!transporterCommand) { throw Error(`Invalid argument ${argv.choiceAorB} given`)}
     const processes: ReturnType<typeof execa>[] = [];
-    // Each time we execute a command we start 8 machines
 
+    // Each time we execute a command we start 7 machines
     const quotient = Math.floor(N / 7)
     const totalNumProcesses = quotient + 1;
     let machinesSpawned = 0;
     // Spawn processes
     for (let i = 0; i < quotient; i++) {
+        /* const p = i <= quotient / 2 ?
+            execa(`node`, commands[lastIndex], {
+                stdout: "ignore",
+                stderr: "ignore",
+            })
+            : execa(`node`, commands[firstIndex], {
+                stdout: "ignore",
+                stderr: "ignore",
+            }) */
         const p = execa(`node`, commands[i % commands.length], {
             stdout: "ignore",
             stderr: "ignore",
         });
-        machinesSpawned = machinesSpawned + 7
-        console.log(`Spawned process ${i+1}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`)
         processes.push(p);
+        machinesSpawned = machinesSpawned + 7
+        clearLineAndPrint(`Spawned processes: ${i+1}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`)
+
+        //console.log(`Spawned process ${i+1}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`)
     }
     processes.push(execa(`node`, [transporterCommand], {
         stdout: "ignore",
         stderr: "ignore",
     }));
     machinesSpawned = machinesSpawned + 2
-    console.log(`Spawned process ${totalNumProcesses}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`)
-
-
+    clearLineAndPrint(`Spawned processes: ${totalNumProcesses}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`)
+    console.log()
     // Update termination spinner as processes exit
     for (const p of processes) {
         p.then(() => {
             terminatedCount++;
-            console.log(`Terminated count: ${terminatedCount}/${totalNumProcesses}`)
+            const msg = terminatedCount < totalNumProcesses ? `Terminated count: ${terminatedCount}/${totalNumProcesses}` : `Terminated count: ${terminatedCount}/${totalNumProcesses}.\n`
+            clearLineAndPrint(msg)
         }).catch((err) => {
             console.log(`Process failed: ${err}`);
+            console.log()
         });
     }
 }

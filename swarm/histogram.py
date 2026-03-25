@@ -24,6 +24,8 @@ class MessageFlow:
 def read_csv(filename):
     with open(filename, 'r') as file:
         reader = csv.DictReader(file, delimiter=',')
+        #for row in reader:
+        #    print(row)
         data = [LogEntry(unix_time_stamp_milliseconds=int(row['unix_time_stamp_milliseconds']), msg_ID=row['msg_ID'], sent_received=row['sent_received']) for row in reader]
     return data
 
