@@ -20,7 +20,7 @@
     "start-window-installer": "node dist/machine_drivers/window_installation_protocol/run_window_installer.js",
     "start-window-checker": "node dist/machine_drivers/window_installation_protocol/run_window_checker.js",
     "start-quality-control": "node dist/machine_drivers/quality_control_protocol/run_quality_control.js",
-    "start-spawner-silent-multiple-per-process": "node dist/spawner_silent_multiple_machines_per_process.js",
+    "spawn-processes": "node dist/spawn_processes.js",
     "collect-logs": "node dist/aggregate_logs.js"
   },
   "devDependencies": {

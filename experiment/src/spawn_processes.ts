@@ -42,15 +42,6 @@ async function main() {
     let machinesSpawned = 0;
     // Spawn processes
     for (let i = 0; i < quotient; i++) {
-        /* const p = i <= quotient / 2 ?
-            execa(`node`, commands[lastIndex], {
-                stdout: "ignore",
-                stderr: "ignore",
-            })
-            : execa(`node`, commands[firstIndex], {
-                stdout: "ignore",
-                stderr: "ignore",
-            }) */
         const p = execa(`node`, commands[i % commands.length], {
             stdout: "ignore",
             stderr: "ignore",
@@ -68,12 +59,6 @@ async function main() {
     machinesSpawned = machinesSpawned + 2
     clearLineAndPrint(`Spawned processes: ${processesSpawned}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`)
 
-    /* processes.push(execa(`node`, [steelTransportCommand], {
-        stdout: "ignore",
-        stderr: "ignore",
-    }));
-    machinesSpawned = machinesSpawned + 1
-    clearLineAndPrint(`Spawned processes: ${totalNumProcesses}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`) */
     setTimeout(() => {
         processes.push(execa(`node`, [steelTransportCommand], {
             stdout: "ignore",
@@ -83,7 +68,7 @@ async function main() {
         machinesSpawned = machinesSpawned + 1
         clearLineAndPrint(`Spawned processes: ${processesSpawned}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`)
         console.log()
-    },  4000)
+    },  25000)
 
 
     console.log()

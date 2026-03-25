@@ -1,4 +1,3 @@
-import { main as steelTransportMain } from "./steel_press_protocol/steel_transport.js";
 import { main as stampMain } from "./steel_press_protocol/stamp.js";
 import { main as bodyAssemblerMain } from "./steel_press_protocol/body_assembler.js";
 import { main as carBodyChecker } from "./steel_press_protocol/car_body_checker.js";
