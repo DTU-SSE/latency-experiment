@@ -1,0 +1,52 @@
+{
+  "name": "swarm-event-latency-experiment",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start-steel-transport": "node dist/machine_drivers/steel_press_protocol/run_steel_transport.js",
+    "start-stamp": "node dist/machine_drivers/steel_press_protocol/run_stamp.js",
+    "start-body-assembler": "node dist/machine_drivers/steel_press_protocol/run_body_assembler.js",
+    "start-car-body-checker": "node dist/machine_drivers/steel_press_protocol/run_car_body_checker.js",
+    "start-painter": "node dist/machine_drivers/paint_shop_protocol/run_painter.js",
+    "start-basic-transport": "node dist/machine_drivers/warehouse_protocol/run_basic_transport.js",
+    "start-smart-transport": "node dist/machine_drivers/warehouse_protocol/run_smart_transport.js",
+    "start-base-station": "node dist/machine_drivers/warehouse_protocol/run_base_station.js",
+    "start-engine-installer": "node dist/machine_drivers/engine_installation_protocol/run_engine_installer.js",
+    "start-engine-checker": "node dist/machine_drivers/engine_installation_protocol/run_engine_checker.js",
+    "start-warehouse": "node dist/machine_drivers/engine_installation_protocol/run_warehouse.js",
+    "start-wheel-installer": "node dist/machine_drivers/wheel_installation_protocol/run_wheel_installer.js",
+    "start-wheel-checker": "node dist/machine_drivers/wheel_installation_protocol/run_wheel_checker.js",
+    "start-window-installer": "node dist/machine_drivers/window_installation_protocol/run_window_installer.js",
+    "start-window-checker": "node dist/machine_drivers/window_installation_protocol/run_window_checker.js",
+    "start-quality-control": "node dist/machine_drivers/quality_control_protocol/run_quality_control.js",
+    "start-spawner-silent-multiple-per-process": "node dist/spawner_silent_multiple_machines_per_process.js",
+    "collect-logs": "node dist/aggregate_logs.js"
+  },
+  "devDependencies": {
+    "@protobuf-ts/plugin": "^2.11.1",
+    "@protobuf-ts/runtime": "^2.11.1",
+    "@types/async": "^3.2.25",
+    "@types/lodash.camelcase": "^4.3.9",
+    "@types/node": "^24.6.2",
+    "@types/react": "^19.2.0",
+    "@types/yargs": "^17.0.33",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "machine-core": "file:./vendor/machine-core-0.1.0.tgz",
+    "@actyx/machine-check": "file:./vendor/actyx-machine-check-0.3.1.tgz",
+    "@actyx/machine-runner": "file:./vendor/actyx-machine-runner-0.5.7.tgz",
+    "@actyx/sdk": "^0.5.10",
+    "async": "^3.2.6",
+    "chalk": "^5.6.0",
+    "execa": "^9.6.0",
+    "ink": "^6.3.1",
+    "ink-spinner": "^5.0.0",
+    "lodash.camelcase": "^4.3.0",
+    "ora": "^9.0.0",
+    "react": "^19.2.0",
+    "yargs": "^18.0.0"
+  }
+}
