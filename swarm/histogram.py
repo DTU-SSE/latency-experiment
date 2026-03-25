@@ -11,6 +11,13 @@ class LogEntry:
     msg_ID: str
     sent_received: str
 
+@dataclass(frozen=True)
+class MessageFlow:
+    msg_ID: str
+    emitted_timestamp: int
+    received_timestamps: int
+    latency: int
+
 def read_csv(filename):
     with open(filename, 'r') as file:
         reader = csv.DictReader(file, delimiter=',')
@@ -19,8 +26,47 @@ def read_csv(filename):
 
 def partition_data(data):
     emitted_msgs = { entry.msg_ID: entry for entry in data if entry.sent_received == 'Emitted' }
-    received_msgs = { entry.msg_ID: entry for entry in data if entry.sent_received == 'Received' }
+    received_msgs = {}
+    for entry in data:
+        if entry.sent_received == 'Received':
+            if entry.msg_ID in received_msgs:
+                received_msgs[entry.msg_ID].append(entry)
+            else:
+                received_msgs[entry.msg_ID] = [entry]
     return {"emitted_msgs": emitted_msgs, "received_msgs": received_msgs}
+
+def compute_message_flows(partitioned):
+    message_flows = []
+    for msg_id, received_entries in partitioned['received_msgs'].items():
+        try:
+            if msg_id in partitioned['emitted_msgs']:
+                emitted_entry = partitioned['emitted_msgs'][msg_id]
+                for received_entry in received_entries:
+                    latency = received_entry.unix_time_stamp_milliseconds - emitted_entry.unix_time_stamp_milliseconds
+                    message_flows.append(MessageFlow(msg_ID=msg_id, emitted_timestamp=emitted_entry.unix_time_stamp_milliseconds, received_timestamps=received_entry.unix_time_stamp_milliseconds, latency=latency))
+        except KeyError:
+            print(f"Msg ID: {msg_id} was received but not emitted.")
+
+    return message_flows
+
+def print_messages(messages):
+    for entry in messages:
+        print(f"Msg ID: {entry.msg_ID}, Timestamp: {entry.unix_time_stamp_milliseconds}, sent/received: {entry.sent_received}")
+
+def print_emitted_received(partitioned):
+    print("Emitted messages:")
+    for msg_id, entry in partitioned['emitted_msgs'].items():
+        print(f"Msg ID: {msg_id}, Timestamp: {entry.unix_time_stamp_milliseconds}, sent/received: {entry.sent_received}")
+
+    print("\nReceived messages:")
+    for msg_id, entries in partitioned['received_msgs'].items():
+        for entry in entries:
+            print(f"Msg ID: {entry.msg_ID},Timestamp: {entry.unix_time_stamp_milliseconds}, sent/received: {entry.sent_received}")
+
+def print_message_flows(message_flows):
+    print("Message Flows:")
+    for flow in message_flows:
+        print(f"Msg ID: {flow.msg_ID}, Emitted Timestamp: {flow.emitted_timestamp}, Received Timestamp: {flow.received_timestamps}, Latency: {flow.latency} ms")
 
 def main():
     parser = argparse.ArgumentParser(description="Histogram of latencies.")
@@ -31,8 +77,14 @@ def main():
     if not args.input or not args.output_filename:
         parser.print_help()
         sys.exit(1)
-    print(read_csv(args.input))
-
+    messages = read_csv(args.input)
+    partitioned = partition_data(messages)
+    print_messages(messages)
+    print()
+    print_emitted_received(partitioned)
+    print()
+    message_flows = compute_message_flows(partitioned)
+    print_message_flows(message_flows)
 
 if __name__ == "__main__":
     main()
