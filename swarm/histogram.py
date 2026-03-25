@@ -4,6 +4,8 @@ import sys
 from pathlib import Path
 import matplotlib.pyplot as plt
 from dataclasses import dataclass
+from matplotlib import colors
+from matplotlib.ticker import PercentFormatter
 
 @dataclass(frozen=True)
 class LogEntry:
@@ -49,6 +51,26 @@ def compute_message_flows(partitioned):
 
     return message_flows
 
+def histogram_latencies(message_flows, output_filename):
+    latencies = [flow.latency for flow in message_flows]
+    n_bins = 20
+    total_flows = len(latencies)
+
+    fig, axs = plt.subplots(1, 2, tight_layout=True)
+    plt.suptitle('Histogram of Latencies')
+
+    axs[0].hist(latencies, bins=n_bins, edgecolor='black')
+    axs[0].set_xlabel('Latency (ms)')
+    axs[0].set_ylabel('Frequency')
+
+    # For percentage histogram, use weights to normalize by total flows
+    axs[1].hist(latencies, bins=n_bins, weights=[100.0/total_flows]*total_flows, edgecolor='black')
+    axs[1].set_xlabel('Latency (ms)')
+    axs[1].set_ylabel('Percentage of Total Messages (%)')
+
+    plt.savefig(output_filename)
+    plt.close()
+
 def print_messages(messages):
     for entry in messages:
         print(f"Msg ID: {entry.msg_ID}, Timestamp: {entry.unix_time_stamp_milliseconds}, sent/received: {entry.sent_received}")
@@ -85,6 +107,8 @@ def main():
     print()
     message_flows = compute_message_flows(partitioned)
     print_message_flows(message_flows)
+
+    histogram_latencies(message_flows, args.output_filename)
 
 if __name__ == "__main__":
     main()
