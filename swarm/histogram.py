@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 from dataclasses import dataclass
 from matplotlib import colors
 from matplotlib.ticker import PercentFormatter
+import numpy as np
 
 @dataclass(frozen=True)
 class LogEntry:
@@ -64,9 +65,10 @@ def histogram_latencies(message_flows, output_filename):
     axs[0].set_ylabel('Frequency')
 
     # For percentage histogram, use weights to normalize by total flows
-    axs[1].hist(latencies, bins=n_bins, weights=[100.0/total_flows]*total_flows, edgecolor='black')
+    axs[1].hist(latencies, bins=n_bins, weights=np.ones(len(latencies)) / len(latencies), edgecolor='black')
+    axs[1].yaxis.set_major_formatter(PercentFormatter(xmax=1))
     axs[1].set_xlabel('Latency (ms)')
-    axs[1].set_ylabel('Percentage of Total Messages (%)')
+    axs[1].set_ylabel('Percentage')
 
     plt.savefig(output_filename)
     plt.close()
@@ -101,12 +103,12 @@ def main():
         sys.exit(1)
     messages = read_csv(args.input)
     partitioned = partition_data(messages)
-    print_messages(messages)
-    print()
-    print_emitted_received(partitioned)
-    print()
+    #print_messages(messages)
+    #print()
+    #print_emitted_received(partitioned)
+    #print()
     message_flows = compute_message_flows(partitioned)
-    print_message_flows(message_flows)
+    #print_message_flows(message_flows)
 
     histogram_latencies(message_flows, args.output_filename)
 
