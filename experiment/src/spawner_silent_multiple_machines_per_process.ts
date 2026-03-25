@@ -17,34 +17,20 @@ async function main() {
             demandOption: true,
             describe: "Number of processes to spawn",
         })
-        .option("choiceAorB", {
-            alias: "c",
-            type: "string",
-            demandOption: true,
-            describe: "Use async.queue() with 8 concurrent workers (a) or Promise.all() (b)"
-        })
         .strict()
         .parse();
 
     const N = argv.numProcesses;
     let terminatedCount = 0;
-    const displayName = `car-factory`
-    const appId = `com.example.${displayName}`
-    const first_half_a = "dist/machine_drivers/run_first_half_A.js"
-    const second_half_a = "dist/machine_drivers/run_second_half_A.js"
-    const first_half_b = "dist/machine_drivers/run_first_half_B_no_steel_t.js"
-    const second_half_b = "dist/machine_drivers/run_second_half_B.js"
-    const commands = argv.choiceAorB === "a" ? [[first_half_a], [second_half_a]]
-        : argv.choiceAorB === "b" ? [[first_half_b], [second_half_b]] : undefined
+
+    const first_half_b = "dist/machine_drivers/run_first_half_no_steel_t.js"
+    const second_half_b = "dist/machine_drivers/run_second_half.js"
+    const commands = [[first_half_b], [second_half_b]]
     if (!commands) { throw Error(`Invalid argument ${argv.choiceAorB} given`)}
 
-    const firstIndex = 0
-    const lastIndex = 1
-
-    const transporterCommand = argv.choiceAorB === "a" ? "dist/machine_drivers/run_two_transporters_A.js"
-        : argv.choiceAorB === "b" ? "dist/machine_drivers/run_two_transporters_B.js" : undefined
+    const transporterCommand = "dist/machine_drivers/run_two_transporters.js"
     if (!transporterCommand) { throw Error(`Invalid argument ${argv.choiceAorB} given`)}
-    const steelTransportCommand = "dist/machine_drivers/run_steel_transport_B.js"
+    const steelTransportCommand = "dist/machine_drivers/run_steel_transport.js"
 
     const processes: ReturnType<typeof execa>[] = [];
 

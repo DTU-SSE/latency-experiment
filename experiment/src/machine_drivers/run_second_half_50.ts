@@ -8,7 +8,7 @@ import { main as windowInstallerMain } from "./window_installation_protocol/wind
 import { main as windowCheckerMain } from "./window_installation_protocol/window_checker.js";
 import { main as qualityControlMain } from "./quality_control_protocol/quality_control.js";
 
-import { runAsyncFunctionsB } from "./call_async_functions.js";
+import { runAsyncFunctions } from "./call_async_functions.js";
 
 const mainFunctions = [
     baseStationMain,
@@ -65,62 +65,7 @@ const mainFunctions = [
     qualityControlMain,
     engineCheckerMain,
     engineCheckerMain,
-
-    baseStationMain,
-    wheelInstallerMain,
-    wheelCheckerMain,
-    windowInstallerMain,
-    windowCheckerMain,
-    windowCheckerMain,
-    qualityControlMain,
-    qualityControlMain,
-    engineCheckerMain,
-    engineCheckerMain,
-
-    baseStationMain,
-    wheelInstallerMain,
-    wheelCheckerMain,
-    windowInstallerMain,
-    windowCheckerMain,
-    windowCheckerMain,
-    qualityControlMain,
-    qualityControlMain,
-    engineCheckerMain,
-    engineCheckerMain,
-
-    baseStationMain,
-    wheelInstallerMain,
-    wheelCheckerMain,
-    windowInstallerMain,
-    windowCheckerMain,
-    windowCheckerMain,
-    qualityControlMain,
-    qualityControlMain,
-    engineCheckerMain,
-    engineCheckerMain,
-
-    baseStationMain,
-    wheelInstallerMain,
-    wheelCheckerMain,
-    windowInstallerMain,
-    windowCheckerMain,
-    windowCheckerMain,
-    qualityControlMain,
-    qualityControlMain,
-    engineCheckerMain,
-    engineCheckerMain,
-
-    baseStationMain,
-    wheelInstallerMain,
-    wheelCheckerMain,
-    windowInstallerMain,
-    windowCheckerMain,
-    windowCheckerMain,
-    qualityControlMain,
-    qualityControlMain,
-    engineCheckerMain,
-    engineCheckerMain,
 ]
 
-console.log("length of second half: ", mainFunctions.length)
-runAsyncFunctionsB(mainFunctions)
+
+runAsyncFunctions(mainFunctions)

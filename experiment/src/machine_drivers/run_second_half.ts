@@ -8,12 +8,10 @@ import { main as windowInstallerMain } from "./window_installation_protocol/wind
 import { main as windowCheckerMain } from "./window_installation_protocol/window_checker.js";
 import { main as qualityControlMain } from "./quality_control_protocol/quality_control.js";
 
-import { runAsyncFunctionsB } from "./call_async_functions.js";
+import { runAsyncFunctions } from "./call_async_functions.js";
 
 const mainFunctions = [
     baseStationMain,
-    //smartTransportMain,
-    //basicTransportMain,
     wheelInstallerMain,
     wheelCheckerMain,
     windowInstallerMain,
@@ -22,4 +20,4 @@ const mainFunctions = [
     engineCheckerMain
 ]
 
-runAsyncFunctionsB(mainFunctions)
+runAsyncFunctions(mainFunctions)

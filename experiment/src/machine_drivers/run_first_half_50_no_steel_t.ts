@@ -5,7 +5,7 @@ import { main as carBodyChecker } from "./steel_press_protocol/car_body_checker.
 import { main as painterMain } from "./paint_shop_protocol/painter.js";
 import { main as engineInstallerMain } from "./engine_installation_protocol/engine_installer.js";
 import { main as warehouseMain } from "./engine_installation_protocol/warehouse.js";
-import { runAsyncFunctionsB } from "./call_async_functions.js";
+import { runAsyncFunctions } from "./call_async_functions.js";
 
 let mainFunctions = [
     stampMain,
@@ -62,61 +62,6 @@ let mainFunctions = [
     engineInstallerMain,
     engineInstallerMain,
     warehouseMain,
-
-    stampMain,
-    bodyAssemblerMain,
-    bodyAssemblerMain,
-    carBodyChecker,
-    carBodyChecker,
-    painterMain,
-    painterMain,
-    engineInstallerMain,
-    engineInstallerMain,
-    warehouseMain,
-
-    stampMain,
-    bodyAssemblerMain,
-    bodyAssemblerMain,
-    carBodyChecker,
-    carBodyChecker,
-    painterMain,
-    painterMain,
-    engineInstallerMain,
-    engineInstallerMain,
-    warehouseMain,
-
-    stampMain,
-    bodyAssemblerMain,
-    bodyAssemblerMain,
-    carBodyChecker,
-    carBodyChecker,
-    painterMain,
-    painterMain,
-    engineInstallerMain,
-    engineInstallerMain,
-    warehouseMain,
-
-    stampMain,
-    bodyAssemblerMain,
-    bodyAssemblerMain,
-    carBodyChecker,
-    carBodyChecker,
-    painterMain,
-    painterMain,
-    engineInstallerMain,
-    engineInstallerMain,
-    warehouseMain,
-
-    stampMain,
-    bodyAssemblerMain,
-    bodyAssemblerMain,
-    carBodyChecker,
-    carBodyChecker,
-    painterMain,
-    painterMain,
-    engineInstallerMain,
-    engineInstallerMain,
-    warehouseMain,
 ]
-console.log("length of first half: ", mainFunctions.length)
-runAsyncFunctionsB(mainFunctions)
+
+runAsyncFunctions(mainFunctions)
