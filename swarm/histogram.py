@@ -67,10 +67,12 @@ def histogram_latencies(message_flows, output_filename):
     axs[0].set_ylabel('Frequency')
 
     # For percentage histogram, use weights to normalize by total flows
-    axs[1].hist(latencies, bins=n_bins, weights=np.ones(len(latencies)) / len(latencies), edgecolor='black')
-    axs[1].yaxis.set_major_formatter(PercentFormatter(xmax=1))
+    #axs[1].hist(latencies, bins=n_bins, weights=np.ones(len(latencies)) / len(latencies), edgecolor='black')
+    #axs[1].yaxis.set_major_formatter(PercentFormatter(xmax=1))
+    axs[1].hist(latencies, bins=n_bins, edgecolor='black', cumulative=True)
     axs[1].set_xlabel('Latency (ms)')
-    axs[1].set_ylabel('Percentage')
+    #axs[1].set_ylabel('Percentage')
+    axs[1].set_ylabel('Cumulative frequency')
 
     plt.savefig(output_filename)
     plt.close()
