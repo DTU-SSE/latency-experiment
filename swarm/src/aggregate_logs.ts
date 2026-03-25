@@ -12,6 +12,7 @@ type LogEntry = {
     };
 };
 
+// Aggregate logs. Turn a directory of logs into a single csv file extracing timestamps, message IDs and received/emitted.
 async function processDirectory(inputDir: string, outputFile: string) {
     const files = fs.readdirSync(inputDir);
 
@@ -51,14 +52,14 @@ async function processDirectory(inputDir: string, outputFile: string) {
     output.end();
 }
 
-// command line args
+// Command line args
 export const getArgs = (): Argv => {
     const argv = yargs(hideBin(process.argv))
         .option("inputDir", {
             alias: "i",
             type: "string",
             description: "Input directory containing logs.",
-            default: "logs"
+            demandOption: true
         })
         .option("outputFile", {
             alias: "o",
@@ -76,7 +77,7 @@ type Argv = {
 }
 
 
-// run
+// Run
 const argv = getArgs()
 
 processDirectory(argv.inputDir, argv.outputFile)
