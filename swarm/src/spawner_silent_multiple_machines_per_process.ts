@@ -44,6 +44,8 @@ async function main() {
     const transporterCommand = argv.choiceAorB === "a" ? "dist/machine_drivers/run_two_transporters_A.js"
         : argv.choiceAorB === "b" ? "dist/machine_drivers/run_two_transporters_B.js" : undefined
     if (!transporterCommand) { throw Error(`Invalid argument ${argv.choiceAorB} given`)}
+    //const steelTransportCommand = "dist/machine_drivers/run_steel_transport_B.js"
+
     const processes: ReturnType<typeof execa>[] = [];
 
     // Each time we execute a command we start 7 machines
@@ -68,8 +70,6 @@ async function main() {
         processes.push(p);
         machinesSpawned = machinesSpawned + 7
         clearLineAndPrint(`Spawned processes: ${i+1}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`)
-
-        //console.log(`Spawned process ${i+1}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`)
     }
     processes.push(execa(`node`, [transporterCommand], {
         stdout: "ignore",
@@ -77,6 +77,14 @@ async function main() {
     }));
     machinesSpawned = machinesSpawned + 2
     clearLineAndPrint(`Spawned processes: ${totalNumProcesses}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`)
+
+    /* processes.push(execa(`node`, [steelTransportCommand], {
+        stdout: "ignore",
+        stderr: "ignore",
+    }));
+    machinesSpawned = machinesSpawned + 1
+    clearLineAndPrint(`Spawned processes: ${totalNumProcesses}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`) */
+
     console.log()
     // Update termination spinner as processes exit
     for (const p of processes) {
