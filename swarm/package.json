@@ -20,15 +20,7 @@
     "start-window-installer": "node dist/src/machine_drivers/window_installation_protocol/run_window_installer.js",
     "start-window-checker": "node dist/src/machine_drivers/window_installation_protocol/run_window_checker.js",
     "start-quality-control": "node dist/src/machine_drivers/quality_control_protocol/run_quality_control.js",
-    "prestart-stamp": "npm run compile-proto",
-    "prestart-body-assembler": "npm run compile-proto",
-    "compile-proto": "npx tsx scripts/compile_protobuf.ts protos/car_factory.proto src/generated/car_factory.ts",
-    "prestart-forwarder": "npm run compile-proto",
-    "start-forwarder": "node dist/src/forwarder.js",
-    "start-spawner": "node dist/src/spawner.js",
-    "start-spawner-silent": "node dist/src/spawner_silent.js",
-    "start-spawner-silent-multiple-per-process": "node dist/src/spawner_silent_multiple_machines_per_process.js",
-    "start-machine-spawner": "npx tsx src/spawn_machines.tsx"
+    "start-spawner-silent-multiple-per-process": "node dist/src/spawner_silent_multiple_machines_per_process.js"
   },
   "devDependencies": {
     "@protobuf-ts/plugin": "^2.11.1",
