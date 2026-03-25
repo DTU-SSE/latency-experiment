@@ -24,16 +24,16 @@ async function main() {
     let terminatedCount = 0;
     const displayName = `car-factory`
     const appId = `com.example.${displayName}`
-    const first_half_a = "dist/src/machine_drivers/run_first_half_A.js"
-    const second_half_a = "dist/src/machine_drivers/run_second_half_A.js"
-    const first_half_b = "dist/src/machine_drivers/run_first_half_B.js"
-    const second_half_b = "dist/src/machine_drivers/run_second_half_B.js"
+    const first_half_a = "dist/machine_drivers/run_first_half_A.js"
+    const second_half_a = "dist/machine_drivers/run_second_half_A.js"
+    const first_half_b = "dist/machine_drivers/run_first_half_B.js"
+    const second_half_b = "dist/machine_drivers/run_second_half_B.js"
     const commands = argv.choiceAorB === "a" ? [[first_half_a], [second_half_a]]
         : argv.choiceAorB === "b" ? [[first_half_b], [second_half_b]] : undefined
     if (!commands) { throw Error(`Invalid argument ${argv.choiceAorB} given`)}
 
-    const transporterCommand = argv.choiceAorB === "a" ? "dist/src/machine_drivers/run_two_transporters_B.js"
-        : argv.choiceAorB === "b" ? "dist/src/machine_drivers/run_two_transporters_B.js" : undefined
+    const transporterCommand = argv.choiceAorB === "a" ? "dist/machine_drivers/run_two_transporters_B.js"
+        : argv.choiceAorB === "b" ? "dist/machine_drivers/run_two_transporters_B.js" : undefined
     if (!transporterCommand) { throw Error(`Invalid argument ${argv.choiceAorB} given`)}
     const processes: ReturnType<typeof execa>[] = [];
     // Each time we execute a command we start 8 machines

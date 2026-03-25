@@ -17,7 +17,7 @@ async function processDirectory(inputDir: string, outputFile: string) {
     const files = fs.readdirSync(inputDir);
 
     const output = fs.createWriteStream(outputFile);
-    output.write("unix_time_stamp_milliseconds,msg_ID,msg\n"); // CSV header
+    output.write("unix_time_stamp_milliseconds,msg_ID,sent_received\n"); // CSV header
 
     for (const file of files) {
         const fullPath = path.join(inputDir, file);

@@ -3,3 +3,5 @@ actyx-data/
 ax-data/
 dist/
 logs/
+env/
+output.csv
