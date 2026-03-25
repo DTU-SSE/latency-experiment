@@ -48,9 +48,11 @@ async function main() {
 
     const processes: ReturnType<typeof execa>[] = [];
 
-    // Each time we execute a command we start 7 machines
-    const quotient = Math.floor(N / 7)
+    // Each time we execute a command we start machinesPerProcess machines
+    const machinesPerProcess = 7
+    const quotient = Math.floor(N / machinesPerProcess)
     const totalNumProcesses = quotient + 2;
+    let processesSpawned = 0;
     let machinesSpawned = 0;
     // Spawn processes
     for (let i = 0; i < quotient; i++) {
@@ -68,15 +70,17 @@ async function main() {
             stderr: "ignore",
         });
         processes.push(p);
-        machinesSpawned = machinesSpawned + 7
-        clearLineAndPrint(`Spawned processes: ${i+1}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`)
+        processesSpawned = processesSpawned + 1
+        machinesSpawned = machinesSpawned + machinesPerProcess
+        clearLineAndPrint(`Spawned processes: ${processesSpawned}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`)
     }
     processes.push(execa(`node`, [transporterCommand], {
         stdout: "ignore",
         stderr: "ignore",
     }));
+    processesSpawned = processesSpawned + 1
     machinesSpawned = machinesSpawned + 2
-    clearLineAndPrint(`Spawned processes: ${totalNumProcesses-1}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`)
+    clearLineAndPrint(`Spawned processes: ${processesSpawned}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`)
 
     /* processes.push(execa(`node`, [steelTransportCommand], {
         stdout: "ignore",
@@ -89,8 +93,9 @@ async function main() {
             stdout: "ignore",
             stderr: "ignore",
         }));
+        processesSpawned = processesSpawned + 1
         machinesSpawned = machinesSpawned + 1
-        clearLineAndPrint(`Spawned processes: ${totalNumProcesses}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`)
+        clearLineAndPrint(`Spawned processes: ${processesSpawned}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`)
         console.log()
     },  4000)
 
