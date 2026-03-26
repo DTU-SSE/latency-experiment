@@ -1,6 +1,7 @@
 import { execa } from "execa";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
+import logUpdate from 'log-update';
 
 function clearLineAndPrint(output: string) {
     process.stdout.clearLine(0);
@@ -8,76 +9,81 @@ function clearLineAndPrint(output: string) {
     process.stdout.write(output)
 }
 
+function updateStdio(strings: string[]) {
+    logUpdate(strings.join(""));
+}
+
 async function main() {
     // Parse args
     const argv = await yargs(hideBin(process.argv))
-        .option("numProcesses", {
+        .option("numMachines", {
             alias: "n",
             type: "number",
             demandOption: true,
-            describe: "Number of processes to spawn",
+            describe: "Number of machines to spawn",
         })
         .strict()
         .parse();
 
-    const N = argv.numProcesses;
+    const N = argv.numMachines;
     let terminatedCount = 0;
 
-    const first_half_b = "dist/machine_drivers/run_first_half_no_steel_t.js"
-    const second_half_b = "dist/machine_drivers/run_second_half.js"
-    const commands = [[first_half_b], [second_half_b]]
-    if (!commands) { throw Error(`Invalid argument ${argv.choiceAorB} given`)}
-
+    const commands = ["dist/machine_drivers/run_machines.js"]
     const transporterCommand = "dist/machine_drivers/run_two_transporters.js"
-    if (!transporterCommand) { throw Error(`Invalid argument ${argv.choiceAorB} given`)}
     const steelTransportCommand = "dist/machine_drivers/run_steel_transport.js"
 
     const processes: ReturnType<typeof execa>[] = [];
 
     // Each time we execute a command we start machinesPerProcess machines
-    const machinesPerProcess = 7
+    const machinesPerProcess = 13
     const quotient = Math.floor(N / machinesPerProcess)
     const totalNumProcesses = quotient + 2;
-    let processesSpawned = 0;
     let machinesSpawned = 0;
+
+    var msg1 = `Spawned processes: ${processes.length}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`
+    var msg2 = ``
     // Spawn processes
     for (let i = 0; i < quotient; i++) {
-        const p = execa(`node`, commands[i % commands.length], {
+        const p = execa(`node`, commands, {
             stdout: "ignore",
             stderr: "ignore",
         });
         processes.push(p);
-        processesSpawned = processesSpawned + 1
         machinesSpawned = machinesSpawned + machinesPerProcess
-        clearLineAndPrint(`Spawned processes: ${processesSpawned}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`)
+        msg1 = `Spawned processes: ${processes.length}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`
+        //updateStdio([msg1, msg2])
+        clearLineAndPrint(msg1)
     }
     processes.push(execa(`node`, [transporterCommand], {
         stdout: "ignore",
         stderr: "ignore",
     }));
-    processesSpawned = processesSpawned + 1
     machinesSpawned = machinesSpawned + 2
-    clearLineAndPrint(`Spawned processes: ${processesSpawned}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`)
+    msg1 = `Spawned processes: ${processes.length}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`
+    //updateStdio([msg1, msg2])
+    clearLineAndPrint(msg1);
+
 
     setTimeout(() => {
         processes.push(execa(`node`, [steelTransportCommand], {
             stdout: "ignore",
             stderr: "ignore",
         }));
-        processesSpawned = processesSpawned + 1
         machinesSpawned = machinesSpawned + 1
-        clearLineAndPrint(`Spawned processes: ${processesSpawned}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`)
-        console.log()
+        msg1 = `Spawned processes: ${processes.length}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}\n`
+        //updateStdio([msg1, msg2])
+        clearLineAndPrint(msg1)
+
     },  25000)
 
-
-    console.log()
     // Update termination spinner as processes exit
     for (const p of processes) {
         p.then(() => {
-            terminatedCount++;
-            const msg = terminatedCount < totalNumProcesses ? `Terminated count: ${terminatedCount}/${totalNumProcesses}` : `Terminated count: ${terminatedCount}/${totalNumProcesses}.\n`
-            clearLineAndPrint(msg)
+            terminatedCount = terminatedCount + 1;
+            msg2 = `Terminated count: ${terminatedCount}/${totalNumProcesses}`
+            //updateStdio([msg1, msg2])
+            clearLineAndPrint(msg2)
+            //console.log(terminatedCount)
         }).catch((err) => {
             console.log(`Process failed: ${err}`);
             console.log()

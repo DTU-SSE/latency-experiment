@@ -54,13 +54,13 @@ def compute_message_flows(partitioned):
 
     return message_flows
 
-def histogram_latencies(message_flows, output_filename):
+def histogram_latencies(message_flows, output_filename, number_of_machines):
     latencies = [flow.latency for flow in message_flows]
     n_bins = 20
     total_flows = len(latencies)
 
     fig, axs = plt.subplots(1, 2, tight_layout=True)
-    plt.suptitle('Histogram of Latencies')
+    plt.suptitle(f"Histogram of Message Latencies ({number_of_machines} machines)")
 
     axs[0].hist(latencies, bins=n_bins, edgecolor='black')
     axs[0].set_xlabel('Latency (ms)')
@@ -100,6 +100,7 @@ def main():
     parser = argparse.ArgumentParser(description="Histogram of latencies.")
     parser.add_argument('-i', '--input', type=Path, help='Input csv. Expected format: unix_time_stamp_milliseconds,msg_ID,sent_received')
     parser.add_argument('-o', '--output_filename', type=Path, help='Output filename')
+    parser.add_argument('-n', '--number_of_machines', type=int, help='Number of machines in experiment')
     args = parser.parse_args()
 
     if not args.input or not args.output_filename:
@@ -114,7 +115,7 @@ def main():
     message_flows = compute_message_flows(partitioned)
     #print_message_flows(message_flows)
 
-    histogram_latencies(message_flows, args.output_filename)
+    histogram_latencies(message_flows, args.output_filename, str(args.number_of_machines))
 
 if __name__ == "__main__":
     main()

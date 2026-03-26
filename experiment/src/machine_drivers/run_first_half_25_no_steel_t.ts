@@ -34,33 +34,6 @@ let mainFunctions = [
     bodyAssemblerMain,
     carBodyChecker,
     carBodyChecker,
-    painterMain,
-    painterMain,
-    engineInstallerMain,
-    engineInstallerMain,
-    warehouseMain,
-
-    stampMain,
-    bodyAssemblerMain,
-    bodyAssemblerMain,
-    carBodyChecker,
-    carBodyChecker,
-    painterMain,
-    painterMain,
-    engineInstallerMain,
-    engineInstallerMain,
-    warehouseMain,
-
-    stampMain,
-    bodyAssemblerMain,
-    bodyAssemblerMain,
-    carBodyChecker,
-    carBodyChecker,
-    painterMain,
-    painterMain,
-    engineInstallerMain,
-    engineInstallerMain,
-    warehouseMain,
 ]
 
 runAsyncFunctions(mainFunctions)

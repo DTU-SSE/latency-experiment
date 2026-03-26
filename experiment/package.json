@@ -35,7 +35,6 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
-    "machine-core": "file:./vendor/machine-core-0.1.0.tgz",
     "@actyx/machine-check": "file:./vendor/actyx-machine-check-0.3.1.tgz",
     "@actyx/machine-runner": "file:./vendor/actyx-machine-runner-0.5.7.tgz",
     "@actyx/sdk": "^0.5.10",
@@ -45,6 +44,8 @@
     "ink": "^6.3.1",
     "ink-spinner": "^5.0.0",
     "lodash.camelcase": "^4.3.0",
+    "log-update": "^7.2.0",
+    "machine-core": "file:./vendor/machine-core-0.1.0.tgz",
     "ora": "^9.0.0",
     "react": "^19.2.0",
     "yargs": "^18.0.0"
