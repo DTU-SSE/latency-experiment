@@ -75,20 +75,21 @@ async function main() {
         clearLineAndPrint(msg1)
 
     },  25000)
+    setTimeout(() => {
+        // Update termination spinner as processes exit
+        for (const p of processes) {
+            p.then(() => {
+                terminatedCount = terminatedCount + 1;
+                msg2 = terminatedCount == totalNumProcesses ? `Terminated processes: ${terminatedCount}/${totalNumProcesses}.\n` : `Terminated processes: ${terminatedCount}/${totalNumProcesses}.`
+                //updateStdio([msg1, msg2])
+                clearLineAndPrint(msg2)
+            }).catch((err) => {
+                console.log(`Process failed: ${err}`);
+                console.log()
+            });
+        }
+    }, 26000)
 
-    // Update termination spinner as processes exit
-    for (const p of processes) {
-        p.then(() => {
-            terminatedCount = terminatedCount + 1;
-            msg2 = `Terminated count: ${terminatedCount}/${totalNumProcesses}`
-            //updateStdio([msg1, msg2])
-            clearLineAndPrint(msg2)
-            //console.log(terminatedCount)
-        }).catch((err) => {
-            console.log(`Process failed: ${err}`);
-            console.log()
-        });
-    }
 }
 
 main().catch((err) => {
