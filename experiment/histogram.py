@@ -24,8 +24,6 @@ class MessageFlow:
 def read_csv(filename):
     with open(filename, 'r') as file:
         reader = csv.DictReader(file, delimiter=',')
-        #for row in reader:
-        #    print(row)
         data = [LogEntry(unix_time_stamp_milliseconds=int(row['unix_time_stamp_milliseconds']), msg_ID=row['msg_ID'], sent_received=row['sent_received']) for row in reader]
     return data
 
@@ -57,7 +55,6 @@ def compute_message_flows(partitioned):
 def histogram_latencies(message_flows, output_filename, number_of_machines):
     latencies = [flow.latency for flow in message_flows]
     n_bins = 20
-    total_flows = len(latencies)
 
     fig, axs = plt.subplots(1, 2, tight_layout=True)
     plt.suptitle(f"Histogram of Message Latencies\n{number_of_machines} machines, {len(latencies)} message deliveries")
@@ -66,11 +63,6 @@ def histogram_latencies(message_flows, output_filename, number_of_machines):
     axs[0].set_xlabel('Latency (ms)')
     axs[0].set_ylabel('Frequency')
 
-    # Percentage histogram
-    #axs[1].hist(latencies, bins=n_bins, weights=np.ones(len(latencies)) / len(latencies), edgecolor='black')
-    #axs[1].yaxis.set_major_formatter(PercentFormatter(xmax=1))
-    #axs[1].set_ylabel('Percentage')
-    # Cumulative histogram
     axs[1].hist(latencies, bins=n_bins, edgecolor='black', cumulative=True)
     axs[1].set_xlabel('Latency (ms)')
     axs[1].set_ylabel('Cumulative frequency')
@@ -107,14 +99,10 @@ def main():
     if not args.input or not args.output_filename:
         parser.print_help()
         sys.exit(1)
+
     messages = read_csv(args.input)
     partitioned = partition_data(messages)
-    #print_messages(messages)
-    #print()
-    #print_emitted_received(partitioned)
-    #print()
     message_flows = compute_message_flows(partitioned)
-    #print_message_flows(message_flows)
 
     histogram_latencies(message_flows, args.output_filename, str(args.number_of_machines))
 

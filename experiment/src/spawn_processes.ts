@@ -67,7 +67,7 @@ async function main() {
 
     },  25000)
     setTimeout(() => {
-        // Update termination spinner as processes exit
+        // Update termination 'spinner' as processes exit
         for (const p of processes) {
             p.then(() => {
                 terminatedCount = terminatedCount + 1;
