@@ -10,3 +10,6 @@ bash five_experiments.sh
 ```
 
 The experiments should take about 10 minutes to run and generate the folders `output_29`, `output_146`, `output_302`, `output_497`, and `output_744` (in `experiments/`) containing histograms showing the message latencies.
+
+## Acknowledgement
+The development of this software was partly funded by the Horizon Europe project 101093006 TaRDIS - [https://project-tardis.eu/](https://project-tardis.eu/).
