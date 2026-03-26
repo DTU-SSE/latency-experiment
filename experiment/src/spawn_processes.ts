@@ -45,7 +45,7 @@ async function main() {
         });
         processes.push(p);
         machinesSpawned = machinesSpawned + machinesPerProcess
-        msg1 = `Spawned processes: ${processes.length}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`
+        msg1 = `Spawned processes: ${processes.length}/${totalNumProcesses} - Total number of machines spawned: ${machinesSpawned}`
         clearLineAndPrint(msg1)
     }
     processes.push(execa(`node`, [transporterCommand], {
@@ -53,7 +53,7 @@ async function main() {
         stderr: "ignore",
     }));
     machinesSpawned = machinesSpawned + 2
-    msg1 = `Spawned processes: ${processes.length}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`
+    msg1 = `Spawned processes: ${processes.length}/${totalNumProcesses} - Total number of machines spawned: ${machinesSpawned}`
     clearLineAndPrint(msg1);
 
     setTimeout(() => {
@@ -62,7 +62,7 @@ async function main() {
             stderr: "ignore",
         }));
         machinesSpawned = machinesSpawned + 1
-        msg1 = `Spawned processes: ${processes.length}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}\n`
+        msg1 = `Spawned processes: ${processes.length}/${totalNumProcesses} - Total number of machines spawned: ${machinesSpawned}\n`
         clearLineAndPrint(msg1)
 
     },  25000)
@@ -71,7 +71,7 @@ async function main() {
         for (const p of processes) {
             p.then(() => {
                 terminatedCount = terminatedCount + 1;
-                msg2 = terminatedCount == totalNumProcesses ? `Terminated processes: ${terminatedCount}/${totalNumProcesses}.\n` : `Terminated processes: ${terminatedCount}/${totalNumProcesses}.`
+                msg2 = terminatedCount == totalNumProcesses ? `Terminated processes: ${terminatedCount}/${totalNumProcesses}\n` : `Terminated processes: ${terminatedCount}/${totalNumProcesses}`
                 clearLineAndPrint(msg2)
             }).catch((err) => {
                 console.log(`Process failed: ${err}`);
