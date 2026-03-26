@@ -1,16 +1,11 @@
 import { execa } from "execa";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import logUpdate from 'log-update';
 
 function clearLineAndPrint(output: string) {
     process.stdout.clearLine(0);
     process.stdout.cursorTo(0);
     process.stdout.write(output)
-}
-
-function updateStdio(strings: string[]) {
-    logUpdate(strings.join(""));
 }
 
 async function main() {
@@ -51,7 +46,6 @@ async function main() {
         processes.push(p);
         machinesSpawned = machinesSpawned + machinesPerProcess
         msg1 = `Spawned processes: ${processes.length}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`
-        //updateStdio([msg1, msg2])
         clearLineAndPrint(msg1)
     }
     processes.push(execa(`node`, [transporterCommand], {
@@ -60,9 +54,7 @@ async function main() {
     }));
     machinesSpawned = machinesSpawned + 2
     msg1 = `Spawned processes: ${processes.length}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}`
-    //updateStdio([msg1, msg2])
     clearLineAndPrint(msg1);
-
 
     setTimeout(() => {
         processes.push(execa(`node`, [steelTransportCommand], {
@@ -71,7 +63,6 @@ async function main() {
         }));
         machinesSpawned = machinesSpawned + 1
         msg1 = `Spawned processes: ${processes.length}/${totalNumProcesses}. Total number of machines spawned: ${machinesSpawned}\n`
-        //updateStdio([msg1, msg2])
         clearLineAndPrint(msg1)
 
     },  25000)
@@ -81,7 +72,6 @@ async function main() {
             p.then(() => {
                 terminatedCount = terminatedCount + 1;
                 msg2 = terminatedCount == totalNumProcesses ? `Terminated processes: ${terminatedCount}/${totalNumProcesses}.\n` : `Terminated processes: ${terminatedCount}/${totalNumProcesses}.`
-                //updateStdio([msg1, msg2])
                 clearLineAndPrint(msg2)
             }).catch((err) => {
                 console.log(`Process failed: ${err}`);
