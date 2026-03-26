@@ -1,2 +1,0 @@
-{"level":30,"time":1774432390770,"pid":86409,"hostname":"comp-nb5361","event":{"transportId":"d20a05f2","delay":14,"msgID":"48682e93-2c13-4cad-bc96-417764a9b9e6","type":"Bid","lbj":"0000000000000019/PpJaJ8tioT.0zBuQ78P0Dm0B7HjQNEPAQvIDx1kkwDY-0"},"msg":"Emitted"}
-{"level":30,"time":1774432391001,"pid":86409,"hostname":"comp-nb5361","event":{"delay":14,"lbj":"0000000000000019/PpJaJ8tioT.0zBuQ78P0Dm0B7HjQNEPAQvIDx1kkwDY-0","msgID":"48682e93-2c13-4cad-bc96-417764a9b9e6","transportId":"d20a05f2","type":"Bid"},"msg":"Received"}
