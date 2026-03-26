@@ -37,4 +37,4 @@ mv $log_dir_default $log_dir
 # aggregate logs and create histogram
 npm run collect-logs -- -i $log_dir -o $csv_output
 python3 histogram.py -i $csv_output -o $pdf_output -n $num_machines_actual
-
+echo "Output written to ${output_dir}/"
