@@ -14,7 +14,8 @@ mkdir $log_dir_default
 ax_log=ax.output
 killall ax &> /dev/null
 rm -rf ax-data
-ax run &> $ax_log&
+ax run &>> $ax_log&
+sleep 5 # wait for ax to start. Sleep for 5 seconds to be sure.
 
 # run the machines logging message receptions and emissions
 npm run spawn-processes -- -n $num_machines_user

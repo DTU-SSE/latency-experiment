@@ -60,7 +60,7 @@ def histogram_latencies(message_flows, output_filename, number_of_machines):
     total_flows = len(latencies)
 
     fig, axs = plt.subplots(1, 2, tight_layout=True)
-    plt.suptitle(f"Histogram of Message Latencies ({number_of_machines} machines, {len(latencies)} message deliveries)")
+    plt.suptitle(f"Histogram of Message Latencies\n{number_of_machines} machines, {len(latencies)} message deliveries")
 
     axs[0].hist(latencies, bins=n_bins, edgecolor='black')
     axs[0].set_xlabel('Latency (ms)')
