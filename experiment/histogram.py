@@ -63,9 +63,17 @@ def histogram_latencies(message_flows, output_filename, number_of_machines):
     axs[0].set_xlabel('Latency (ms)')
     axs[0].set_ylabel('Frequency')
 
-    axs[1].hist(latencies, bins=n_bins, edgecolor='black', cumulative=True)
+
+    # Cumulative percentage
+    axs[1].hist(latencies, bins=n_bins, edgecolor='black', cumulative=True, density=True)
+    axs[1].yaxis.set_major_formatter(PercentFormatter(xmax=1))
+    axs[1].set_ylim(0, 1)
     axs[1].set_xlabel('Latency (ms)')
-    axs[1].set_ylabel('Cumulative frequency')
+    axs[1].set_ylabel('Cumulative relative frequency (%)')
+
+    #axs[1].hist(latencies, bins=n_bins, edgecolor='black', cumulative=True)
+    #axs[1].set_xlabel('Latency (ms)')
+    #axs[1].set_ylabel('Cumulative frequency')
 
     plt.savefig(output_filename)
     plt.close()
